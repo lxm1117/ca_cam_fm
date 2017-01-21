@@ -1,0 +1,83 @@
+/* exmpales followed:
+	/S7_surfaces/signal.txt
+	/S7_surfaces/unbounded_diffusion/emitter1.txt
+	/S99_more/neuron/neuron.txt
+
+units: nm ms
+M^(-1)s^(-1)=170 * 10^(-5) nm^3 ms^(-1)
+uM^(-1)s^(-1)=1700 nm^3 ms^(-1)
+*/
+
+define stimtime 500
+
+define save_on
+#define graph_on
+define gradient
+
+#-------------General parameters-------
+ifdefine graph_on
+	graphics opengl_good
+	graphic_iter 1
+	frame_thickness 0
+	frame_color 1 1 1
+	#grid_thickness 1
+else
+	graphics none
+endif
+
+dim 3
+accuracy 10
+
+molperbox 3
+#boxsize 180
+
+boundaries 0 -300 300
+boundaries 1 -300 300
+boundaries 2 -5  5100  
+
+time_start 0
+time_stop  stimtime
+time_step  0.001 #1 usec, step  1.0/4.5/10, 4.5 is the largets off time step 
+
+
+#---this part must preceed comparts part ---
+ifdefine save_on
+	output_files molcount_cplx_ca.txt  molcount_cplx_cam.txt molcount_cplx_bK.txt
+	cmd n 10 molstatecountincmpt complete ca molcount_cplx_ca.txt
+	cmd n 10 molstatecountincmpt complete cam molcount_cplx_cam.txt
+	cmd n 10 molstatecountincmpt complete bK molcount_cplx_bK.txt
+
+#	output_files molcount_cplx.txt.2
+#	cmd n 10 molcountincmpts complete molcount_cplx.txt.2
+	events reaction_events_cplx.txt
+endif
+
+
+#-------------Molecules----------------
+read_file reaction_cplx.txt.1
+
+#------------------Geometry------------
+read_file geometry_cplx.txt
+
+#------------molecules in compartment--
+read_file initial_cplx.txt
+
+#------------commands------------------
+# pointsource molec_name molec_num sunit pos0 pos1 pos2
+#cmd i 0 300 0.1 pointsource ca 5 1 0 0 499 
+
+multibinding on
+
+ifdefine graph_on
+	display_size all 2
+	color ca  		  red
+	color cam	 	  blue
+
+	text_display ca
+	text_display cam
+
+	text_display time
+	cmd b pause
+endif
+
+end_file

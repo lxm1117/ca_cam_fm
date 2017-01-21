@@ -1,0 +1,12 @@
+compartment_mol	700  1 complete  cam
+compartment_mol	3000  1 complete  ca
+compartment_mol 250  6 complete bK 
+
+# 300 ca in total  30Hz (33.33ms int,start @0ms) 10 pulses
+#cmd i 0 300 10 pointsource ca 300 1 0 0 499
+
+# 3000 ca in total 6.67 Hz 5 pulses
+#cmd i 0 601 150 pointsource ca  1 0 0 499
+
+# 5580 ca in total 6.67 Hz 6 pulses
+#cmd i 0 751 150 pointsource ca 930 1 0 0 499
